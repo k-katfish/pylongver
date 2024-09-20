@@ -55,7 +55,7 @@ print_version_info()
 
 ### Authors
 
-Kyle Ketchell, independent contributor
+Kyle Ketchell, creator and maintainer
 
 ### License
 
