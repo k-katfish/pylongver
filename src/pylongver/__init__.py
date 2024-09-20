@@ -31,7 +31,7 @@ print_version_info()
 ```
 """
 
-from .longversion import LongVersionAction
+from .longversion import LongVersion
 from .longversion import add_longversion_argument
 from .longversion import print_version_info
 from .longversion import get_module_version

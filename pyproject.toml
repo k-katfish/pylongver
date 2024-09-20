@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pylongver"
-version = "0.1.0"
+version = "0.2.5"
 description = "A python module to print the verbose version of your code"
 authors = [
     {name="k-katfish"}
@@ -22,6 +22,7 @@ classifiers = [
 [project.urls]
 "Homepage" = "https://github.com/k-katfish/pylongver"
 "Source" = "https://github.com/k-katfish/pylongver"
+"Issues" = "https://github.com/k-katfish/pylongver/issues"
 
 [tool.setuptools]
 package-dir = { "" = "src" }

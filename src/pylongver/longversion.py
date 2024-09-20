@@ -1,33 +1,68 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import importlib.metadata
 import sys
 import platform
 import ssl
 import importlib
 import argparse
 
-try:
-    import importlib.metadata as importlib_metadata
-except ImportError:
-    import pkg_resources
+try: import importlib.metadata as importlib_metadata
+except ImportError: import pkg_resources
 
-class LongVersionAction(argparse.Action):
-    def __init__(self, option_strings, dest, **kwargs):
+class LongVersion(argparse.Action):
+    """
+    An argparse action that prints the version information of the Python
+    interpreter, system, OpenSSL, and imported modules when called.
+
+    Example:
+    
+    ```python
+    import argparse
+    from longversion import LongVersionAction
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--longversion', action=LongVersionAction, version='1.0.0')
+    args = parser.parse_args()
+    # When the --longversion argument is called, the version info is printed,
+    # along with an extra line showing the version of your program, then exits.
+    ```
+
+    This is similar to the built-in `--version` argument in argparse
+    (action='version').
+    """
+
+    version: str = None
+    """
+    A program name and/or version to show when the argument is called.
+    """
+
+    def __init__(self, option_strings, dest, version: str=None, **kwargs):
+        self.version = version
         super().__init__(option_strings, dest, nargs=0, **kwargs)
 
     def __call__(self, parser, namespace, values, option_string=None):
-        print_version_info()
+        prog = parser.prog
+        if self.version:
+            if '%(prog)' in self.version:
+                self.version = self.version % {'prog': prog}
+            else:
+                self.version = f"({prog}) {self.version}"
+        else:
+            self.version = f"({prog})"
+        print_version_info(self.version)
         parser.exit()
         
         
-def print_version_info():
+def print_version_info(version: str=None) -> None:
     """
     Prints the version information of the Python interpreter, system, OpenSSL,
     and imported modules.
     """
-    
+    # Program Version (if provided)
+    if version: print(version)
+    print("Long Version Info:")
+
     # Python Version
     print(f"Python Version: {sys.version}")
 
@@ -76,7 +111,41 @@ def get_module_version(module_name):
     except ImportError: raise ImportError(f"No version info for {module_name}")
 
 # This function makes it easier to add the longversion to argparse
-def add_longversion_argument(parser):
-    parser.add_argument('--lvi', '--longversion', action=LongVersionAction, 
-                        help='Show extended version info and exit')
+def add_longversion_argument(
+    parser: argparse, 
+    option: str='--longversion', 
+    version: str = None) -> None:
+    """
+    Adds the longversion argument to the parser.
+    
+    Args:
+        parser (argparse.ArgumentParser): The parser to add the argument to.
+        option (str): The option string to use for the argument.
+        version (str): The version to show when the argument is called.
 
+    Example:
+    
+    ```python
+    import argparse
+    from longversion import add_longversion_argument
+
+    # Example 1
+    # Adds the --longversion argument to the parser
+    parser = argparse.ArgumentParser()
+    add_longversion_argument(parser)
+    args = parser.parse_args()
+    # When the --longversion argument is called, the version info is printed,
+    # and the program exits.
+
+    # Example 2
+    # Adds the --version argument to the parser with a custom version of your
+    # program
+    parser = argparse.ArgumentParser()
+    add_longversion_argument(parser, '--version', '1.0.0')
+    args = parser.parse_args()
+    # When the --version argument is called, the version info is printed,
+    # along with an extra line showing the version of your program, then exits.
+    ```
+    """
+    parser.add_argument(option, action=LongVersion, 
+         help='Show extended version info and exit')

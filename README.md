@@ -14,7 +14,8 @@ function to print the version information directly.
 
 ```python
 >>> from pylongver import print_version_info
->>> print_version_info()
+>>> print_version_info("My Package 1.0.0")
+My Package 1.0.0
 Python Version: 3.12.6 (main, Sep  8 2024, 13:18:56) [GCC 14.2.1 20240805]
 System: Linux
 Platform: Linux-6.10.10-arch1-1-x86_64-with-glibc2.40
@@ -36,10 +37,10 @@ zlib: 1.0
 
 ```python
 import argparse
-from pylongver import add_longversion_argument
+from pylongver import LongVersion
 
 parser = argparse.ArgumentParser()
-add_longversion_argument(parser)
+parser.add_argument("--version", action=LongVersion, version="My Package 1.0.0")
 args = parser.parse_args()
 ```
 
@@ -60,3 +61,4 @@ Kyle Ketchell, creator and maintainer
 ### License
 
 MIT
+
