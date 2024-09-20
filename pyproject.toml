@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools >= 42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pylongver"
+version = "0.1.0"
+description = "A python module to print the verbose version of your code"
+authors = [
+    {name="k-katfish"}
+]
+license = {file="LICENSE"}
+readme = "README.md"
+requires-python = ">=3.6"
+keywords = ["version", "verbose", "pylongver", "system info", "debug", "argparse"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/k-katfish/pylongver"
+"Source" = "https://github.com/k-katfish/pylongver"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
